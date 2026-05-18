@@ -500,4 +500,5 @@ if __name__ == "__main__":
     parser.add_argument("--run_name", type=str, default=None, help="Some run")
     
     # Execute the experiment with the parsed arguments
+    args = parser.parse_args()
     run_training_experiment(args)
