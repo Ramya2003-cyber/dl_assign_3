@@ -394,7 +394,7 @@ def run_training_experiment(args: argparse.Namespace) -> None:
     }
 
     # Initialize W&B Experiment Tracking
-    wandb.init(project="da6401-a3", name=args.run_name, config=config,mode="disabled")
+    wandb.init(project="da6401-a3", name=args.run_name, config=config)
     cfg = wandb.config
     device = cfg.device
 
