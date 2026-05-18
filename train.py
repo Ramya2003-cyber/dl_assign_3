@@ -268,14 +268,20 @@ def evaluate_bleu(
                 hypotheses.append(pred_words)
                 references.append([true_words])  # List of reference lists for corpus_bleu
     try:
+        from bleu import list_bleu
         
-        bleu_score=bleu.corpus_bleu(references,hypotheses)
-        if bleu_score<1.0:
-            bleu_score*=100
+       
+        hyp_strings = [" ".join(hyp) for hyp in hypotheses]
+        
+        ref_strings = [" ".join(ref[0]) for ref in references]
+        
+        bleu_score = list_bleu([ref_strings], hyp_strings)
+        
         return float(bleu_score)
+        
     except Exception as e:
         print(f"Error computing BLEU: {e}")
-        return float(bleu.compute_bleu(references,hypotheses)*100)
+        return 0.0
 
 
 
