@@ -387,7 +387,7 @@ def run_training_experiment(args: argparse.Namespace) -> None:
     }
 
     # Initialize W&B Experiment Tracking
-    wandb.init(project="da6401-a3", name=args.run_name, config=config,settings=wandb.Settings(console="off"))
+    wandb.init(project="da6401-a3", name=args.run_name, config=config,mode="disabled")
     cfg = wandb.config
     device = cfg.device
 
@@ -411,6 +411,7 @@ def run_training_experiment(args: argparse.Namespace) -> None:
         val_dataset.process_data()
         test_dataset.process_data()
     except Exception as e:
+        print(f"Error loading dataset or building vocab: {e}")
         raise ImportError(f"Failed to import dataset.py: {e}")
 
     pad_idx = en_vocab.stoi.get('<pad>', 1)
