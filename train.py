@@ -27,6 +27,7 @@ import os
 import argparse
 import wandb
 import torch.optim as optim
+import bleu
 
 # ══════════════════════════════════════════════════════════════════════
 #  LABEL SMOOTHING LOSS  
@@ -267,7 +268,7 @@ def evaluate_bleu(
                 hypotheses.append(pred_words)
                 references.append([true_words])  # List of reference lists for corpus_bleu
     try:
-        import bleu
+        
         bleu_score=bleu.corpus_bleu(references,hypotheses)
         if bleu_score<1.0:
             bleu_score*=100
