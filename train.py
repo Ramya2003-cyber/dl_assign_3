@@ -420,10 +420,21 @@ def run_training_experiment(args: argparse.Namespace) -> None:
     wandb.config.update({"src_vocab_size": src_vocab_size, "tgt_vocab_size": tgt_vocab_size})
 
     # 3. Create DataLoaders
+    def pad_collate_fn(batch):
+        src_batch, tgt_batch = zip(*batch)
+        
+        # Using your existing pad_idx variable
+        src_padded = nn.utils.rnn.pad_sequence(
+            [torch.tensor(s) for s in src_batch], batch_first=True, padding_value=pad_idx
+        )
+        tgt_padded = nn.utils.rnn.pad_sequence(
+            [torch.tensor(t) for t in tgt_batch], batch_first=True, padding_value=pad_idx
+        )
+        return src_padded, tgt_padded
     collate_fn = getattr(train_dataset, "collate_fn", None)
-    train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True, collate_fn=collate_fn)
-    val_loader = DataLoader(val_dataset, batch_size=cfg.batch_size, shuffle=False, collate_fn=collate_fn)
-    test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, shuffle=False, collate_fn=collate_fn)
+    train_loader = DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True, collate_fn=pad_collate_fn)
+    val_loader = DataLoader(val_dataset, batch_size=cfg.batch_size, shuffle=False, collate_fn=pad_collate_fn)
+    test_loader = DataLoader(test_dataset, batch_size=cfg.batch_size, shuffle=False, collate_fn=pad_collate_fn)
 
     # 4. Instantiate Transformer Model Shell
     model = Transformer(
