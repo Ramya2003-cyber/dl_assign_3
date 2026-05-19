@@ -496,7 +496,7 @@ class Transformer(nn.Module):
         # 2. Download the weights from Google Drive if they aren't on the server yet
         if not os.path.exists(checkpoint_path):
             import gdown
-            drive_id = "YOUR_DRIVE_ID_HERE"  # <-- Make sure to paste your actual ID here!
+            drive_id = "1h53ElXsT-SmUr90IrxOGPeTbPaOGFQY1"  # <-- Make sure to paste your actual ID here!
             gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
             
         # 3. Safely load the weights
