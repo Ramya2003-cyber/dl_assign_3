@@ -454,7 +454,7 @@ class Transformer(nn.Module):
         #    Autograder calls Transformer() with no args so file won't exist yet.
         #    We need the file on disk before we can read its config.
         if not os.path.exists(checkpoint_path):
-            drive_id = "1xiaLti28ybS6Odm6Y82ySRJVqEE-A-Xx"
+            drive_id = "1IiSskKY9wyUTexFczWUiHzFx0JzBKroy"
             print(f"Downloading weights → {checkpoint_path} ...")
             gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
 
