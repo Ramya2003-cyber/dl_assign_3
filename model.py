@@ -440,12 +440,12 @@ class Transformer(nn.Module):
         self,
         src_vocab_size: int=7853,
         tgt_vocab_size: int=5893,
-        d_model:   int   = 512,
-        N:         int   = 6,
+        d_model:   int   = 256,
+        N:         int   = 3,
         num_heads: int   = 8,
-        d_ff:      int   = 2048,
-        dropout:   float = 0.1,
-        checkpoint_path: str = None,
+        d_ff:      int   = 512,
+        dropout:   float = 0.2,
+        checkpoint_path: str = "best_model_weights.pt",
     ) -> None:
         super().__init__()
         try:
@@ -497,7 +497,7 @@ class Transformer(nn.Module):
         if not os.path.exists(checkpoint_path):
             import gdown
             drive_id = "1h53ElXsT-SmUr90IrxOGPeTbPaOGFQY1"  # <-- Make sure to paste your actual ID here!
-            gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
+            gdown.download(id=drive_id, output=checkpoint_path, quiet=True)
             
         # 3. Safely load the weights
         if os.path.exists(checkpoint_path):
@@ -505,12 +505,9 @@ class Transformer(nn.Module):
                 # Load to CPU safely
                 checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
                 
-                # Plug the trained weights into the model
                 self.load_state_dict(checkpoint['model_state_dict'])
             except Exception as e:
-                # Silently catch shape mismatches during the TA's structural tests
-                # This ensures you keep your 30/50 points for the MHA checks!
-                pass
+                print(f"FAILED TO LOAD WEIGHTS: {e}")
         
         '''if checkpoint_path is not None:
             # Prevent re-downloading every single time you initialize the model
