@@ -479,7 +479,7 @@ class Transformer(nn.Module):
 
         # init should also load the model weights if checkpoint path provided, download the .pth file like this
         if checkpoint_path is not None:
-            gdown.download(id="<.pth drive id>", output=checkpoint_path, quiet=False)
+            gdown.download(id="1f1YPG5H73BvG5QtR9_5y66gKpU4RZj-X", output=checkpoint_path, quiet=False)
         
         '''if checkpoint_path is not None:
             # Prevent re-downloading every single time you initialize the model
