@@ -453,10 +453,10 @@ class Transformer(nn.Module):
         # ── Step 1: Download weights FIRST (before building any layers) ───
         #    Autograder calls Transformer() with no args so file won't exist yet.
         #    We need the file on disk before we can read its config.
-        if not os.path.exists(checkpoint_path):
-            drive_id = "1IiSskKY9wyUTexFczWUiHzFx0JzBKroy"
-            print(f"Downloading weights → {checkpoint_path} ...")
-            gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
+        # if not os.path.exists(checkpoint_path):
+        #     drive_id = "1IiSskKY9wyUTexFczWUiHzFx0JzBKroy"
+        #     print(f"Downloading weights → {checkpoint_path} ...")
+        #     gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
 
         # ── Step 2: Read architecture from checkpoint BEFORE building layers
         #    Priority: model_config dict → shape inference → defaults
