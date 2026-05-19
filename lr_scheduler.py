@@ -10,7 +10,7 @@ Formula:
 import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import LRScheduler
-
+import matplotlib.pyplot as plt
 
 # ─────────────────────────────────────────────
 # TODO: Implement the NoamScheduler class below
@@ -119,7 +119,7 @@ def get_lr_history(
 # ──────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    
 
     D_MODEL      = 512
     WARMUP_STEPS = 4000

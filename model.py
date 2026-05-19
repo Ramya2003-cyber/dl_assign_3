@@ -24,8 +24,7 @@ from spacy.cli import download
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-
+from dataset import Multi30kDataset
 # ══════════════════════════════════════════════════════════════════════
 #   STANDALONE ATTENTION FUNCTION  
 #    Exposed at module level so the autograder can import and test it
@@ -482,13 +481,12 @@ class Transformer(nn.Module):
             download("en_core_web_sm")
 
         # Load tokenizers so infer() can use them
-        import spacy
         self.spacy_de = spacy.load("de_core_news_sm")
         self.spacy_en = spacy.load("en_core_web_sm")
 
         # ── Step 3: Build vocabularies inside __init__ (autograder requirement) ──
         # Vocab is sorted deterministically so it always matches training order.
-        from dataset import Multi30kDataset
+        
         _train_ds = Multi30kDataset(split='train')
         _train_ds.build_vocab(min_freq=2)
         self.de_vocab = _train_ds.de_vocab   # CustomVocab with .stoi / .itos

@@ -29,6 +29,8 @@ import argparse
 import wandb
 import torch.optim as optim
 import bleu
+from bleu import list_bleu
+from dataset import Multi30kDataset
 
 # ══════════════════════════════════════════════════════════════════════
 #  LABEL SMOOTHING LOSS  
@@ -265,7 +267,7 @@ def evaluate_bleu(
                 hypotheses.append(pred_words)
                 references.append([true_words])  # List of reference lists for corpus_bleu
     try:
-        from bleu import list_bleu
+        
         
        
         hyp_strings = [" ".join(hyp) for hyp in hypotheses]
@@ -432,7 +434,7 @@ def run_training_experiment(args: argparse.Namespace) -> None:
 
     # 2. Build Dataset and Vocabularies from dataset.py
     try:
-        from dataset import Multi30kDataset
+        
         print("Loading datasets and compiling vocabularies...")
         train_dataset = Multi30kDataset(split='train')
         val_dataset = Multi30kDataset(split='validation')
