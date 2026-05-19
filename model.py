@@ -648,5 +648,7 @@ class Transformer(nn.Module):
         trg_words=[self.en_vocab.itos[idx] for idx in tgt_indices[1:]]
         if trg_words and trg_words[-1]=='<eos>':
             trg_words.pop()
-        return ' '.join(trg_words)
+        final_translation = ' '.join(trg_words)
+        print(f"Outputting: {final_translation}")
+        return final_translation
         
