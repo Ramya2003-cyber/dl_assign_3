@@ -196,19 +196,19 @@ def greedy_decode(
              or when max_len is reached.
 
     """
-    # TODO: Task 3.3 — implement token-by-token greedy decoding
-    model.eval()
+    # Unwrap DataParallel — custom methods (encode/decode) live on .module, not the wrapper
+    raw = model.module if hasattr(model, 'module') else model
+    raw.eval()
     with torch.no_grad():
-        memory=model.encode(src.to(device),src_mask.to(device))
+        memory=raw.encode(src.to(device),src_mask.to(device))
     ys=torch.zeros(1,1,dtype=torch.long,device=device).fill_(start_symbol)
     for _ in range(max_len-1):
         tgt_mask=make_tgt_mask(ys,pad_idx=PAD_IDX).to(device)
         with torch.no_grad():
             # decode() now returns logits [1, seq_len, tgt_vocab_size] directly
-            logits=model.decode(memory,src_mask,ys,tgt_mask)
+            logits=raw.decode(memory,src_mask,ys,tgt_mask)
         next_word = logits[:,-1,:].argmax(dim=-1).item()
-        next_tensor=torch.zeros(1,1,dtype=torch.long,device=device).fill_(next_word)
-        ys=torch.cat([ys,next_tensor],dim=1)
+        ys = torch.cat([ys, torch.tensor([[next_word]], dtype=torch.long, device=device)], dim=1)
         if next_word==end_symbol:
             break
     return ys
