@@ -15,3 +15,6 @@ assignment3/
 ├── dataset.py         # Multi30k dataset loading and spacy tokenization
 ├── train.py           # Training loops and Greedy Decoding inference
 ```
+
+wandb report-https://api.wandb.ai/links/cs25m049-iit-madras/q4cwrpj5
+github link-https://github.com/Ramya2003-cyber/dl_assign_3.git
