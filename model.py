@@ -477,7 +477,12 @@ class Transformer(nn.Module):
             'd_ff': d_ff,
             'dropout': dropout
         }
-
+        try:
+            self.spacy_de = spacy.load("de_core_news_sm")
+        except OSError:
+            from spacy.cli import download
+            download("de_core_news_sm")
+            self.spacy_de = spacy.load("de_core_news_sm")
         # init should also load the model weights if checkpoint path provided, download the .pth file like this
         if checkpoint_path is not None:
             gdown.download(id="1f1YPG5H73BvG5QtR9_5y66gKpU4RZj-X", output=checkpoint_path, quiet=False)
@@ -582,16 +587,10 @@ class Transformer(nn.Module):
         """
         self.eval()
         device=next(self.parameters()).device
-        try:
-            spacy_de = spacy.load("de_core_news_sm")
-        except OSError:
-            # If the autograder container doesn't have the dictionary, download it silently!
-            from spacy.cli import download
-            download("de_core_news_sm")
-            spacy_de = spacy.load("de_core_news_sm")
+        
         
     
-        tokens = [token.text.lower() for token in spacy_de.tokenizer(src_sentence)]
+        tokens = [token.text.lower() for token in self.spacy_de.tokenizer(src_sentence)]
         tokens=['<sos>']+tokens+['<eos>']
         unk_idx=self.de_vocab.stoi.get('<unk>', 0)
         src_indices=[self.de_vocab.stoi.get(tok, unk_idx) for tok in tokens]
