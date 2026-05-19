@@ -500,14 +500,29 @@ class Transformer(nn.Module):
             gdown.download(id=drive_id, output=checkpoint_path, quiet=True)
             
         # 3. Safely load the weights
+        # 3. Safely load the weights (REPLACE YOUR OLD BLOCK WITH THIS)
         if os.path.exists(checkpoint_path):
             try:
                 # Load to CPU safely
                 checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
+                state_dict = checkpoint['model_state_dict']
                 
-                self.load_state_dict(checkpoint['model_state_dict'])
+                # Proactively fix the Kaggle DataParallel bug
+                clean_state_dict = {}
+                for key, value in state_dict.items():
+                    if key.startswith('module.'):
+                        # Strip "module." from the string
+                        clean_state_dict[key[7:]] = value
+                    else:
+                        clean_state_dict[key] = value
+                
+                # Load the cleaned weights into the model
+                self.load_state_dict(clean_state_dict)
+                print("WEIGHTS SUCCESSFULLY LOADED AND APPLIED!")
+                
             except Exception as e:
-                print(f"FAILED TO LOAD WEIGHTS: {e}")
+                # If PyTorch still rejects the weights, PRINT THE REASON to the console!
+                print(f"CRITICAL WEIGHT ERROR: {e}")
         
         '''if checkpoint_path is not None:
             # Prevent re-downloading every single time you initialize the model
