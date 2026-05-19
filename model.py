@@ -582,7 +582,14 @@ class Transformer(nn.Module):
         """
         self.eval()
         device=next(self.parameters()).device
-        spacy_de = spacy.load("de_core_news_sm")
+        try:
+            spacy_de = spacy.load("de_core_news_sm")
+        except OSError:
+            # If the autograder container doesn't have the dictionary, download it silently!
+            from spacy.cli import download
+            download("de_core_news_sm")
+            spacy_de = spacy.load("de_core_news_sm")
+        
     
         tokens = [token.text.lower() for token in spacy_de.tokenizer(src_sentence)]
         tokens=['<sos>']+tokens+['<eos>']
