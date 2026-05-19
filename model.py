@@ -449,6 +449,12 @@ class Transformer(nn.Module):
     ) -> None:
         super().__init__()
         try:
+            self.spacy_de = spacy.load("de_core_news_sm")
+        except OSError:
+            from spacy.cli import download
+            download("de_core_news_sm")
+            self.spacy_de = spacy.load("de_core_news_sm")
+        try:
             from dataset import Multi30kDataset
             self.dataset_helper=Multi30kDataset(split='train')
             self.dataset_helper.build_vocab()
@@ -477,12 +483,7 @@ class Transformer(nn.Module):
             'd_ff': d_ff,
             'dropout': dropout
         }
-        try:
-            self.spacy_de = spacy.load("de_core_news_sm")
-        except OSError:
-            from spacy.cli import download
-            download("de_core_news_sm")
-            self.spacy_de = spacy.load("de_core_news_sm")
+        
         # init should also load the model weights if checkpoint path provided, download the .pth file like this
         if checkpoint_path is not None:
             gdown.download(id="1f1YPG5H73BvG5QtR9_5y66gKpU4RZj-X", output=checkpoint_path, quiet=False)
