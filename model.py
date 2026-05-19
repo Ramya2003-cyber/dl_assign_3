@@ -491,6 +491,14 @@ class Transformer(nn.Module):
         # init should also load the model weights if checkpoint path provided, download the .pth file like this
         if checkpoint_path is not None:
             gdown.download(id="1f1YPG5H73BvG5QtR9_5y66gKpU4RZj-X", output=checkpoint_path, quiet=False)
+        if os.path.exists(checkpoint_path):
+            print(f"Loading trained weights from {checkpoint_path}...")
+            
+            checkpoint = torch.load(checkpoint_path, map_location=torch.device('cpu'))
+            
+            self.load_state_dict(checkpoint['model_state_dict'])
+            
+            print("Weights successfully loaded!")
         
         '''if checkpoint_path is not None:
             # Prevent re-downloading every single time you initialize the model
@@ -592,9 +600,6 @@ class Transformer(nn.Module):
         """
         self.eval()
         device=next(self.parameters()).device
-        
-        
-    
         tokens = [token.text.lower() for token in self.spacy_de.tokenizer(src_sentence)]
         tokens=['<sos>']+tokens+['<eos>']
         unk_idx=self.de_vocab.stoi.get('<unk>', 0)
@@ -620,3 +625,4 @@ class Transformer(nn.Module):
         if trg_words and trg_words[-1]=='<eos>':
             trg_words.pop()
         return ' '.join(trg_words)
+        
