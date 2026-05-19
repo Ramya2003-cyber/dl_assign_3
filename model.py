@@ -514,7 +514,7 @@ class Transformer(nn.Module):
         
         # ── Step 4: Download weights if not cached, then load ───────────
         if not os.path.exists(checkpoint_path):
-            drive_id = "1h53ElXsT-SmUr90IrxOGPeTbPaOGFQY1"
+            drive_id = "1fD3LSpa4pdMDf-K1DdmK4a27fljQRg1f"
             gdown.download(id=drive_id, output=checkpoint_path, quiet=True)
 
         if os.path.exists(checkpoint_path):
