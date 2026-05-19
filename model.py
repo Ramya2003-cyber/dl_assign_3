@@ -19,6 +19,7 @@ import copy
 import os
 import gdown
 from typing import Optional, Tuple
+import spacy
 
 import torch
 import torch.nn as nn
@@ -581,7 +582,9 @@ class Transformer(nn.Module):
         """
         self.eval()
         device=next(self.parameters()).device
-        tokens=[token.text.lower() for token in self.spacy_de.tokenizer(src_sentence)]
+        spacy_de = spacy.load("de_core_news_sm")
+    
+        tokens = [token.text.lower() for token in spacy_de.tokenizer(src_sentence)]
         tokens=['<sos>']+tokens+['<eos>']
         unk_idx=self.de_vocab.stoi.get('<unk>', 0)
         src_indices=[self.de_vocab.stoi.get(tok, unk_idx) for tok in tokens]
