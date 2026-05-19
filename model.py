@@ -454,7 +454,7 @@ class Transformer(nn.Module):
         #    Autograder calls Transformer() with no args so file won't exist yet.
         #    We need the file on disk before we can read its config.
         if not os.path.exists(checkpoint_path):
-            drive_id = "1xiaLti28ybS6Odm6Y82ySRJVqEE-A-Xx"
+            drive_id = "15jrcn1OIE10uJKZCL2dOA9QxMZ6qEMWj"
             print(f"Downloading weights → {checkpoint_path} ...")
             gdown.download(id=drive_id, output=checkpoint_path, quiet=False)
 
@@ -569,7 +569,7 @@ class Transformer(nn.Module):
         """
     
         # §3.4: scale embedding by √d_model before adding positional encoding
-        src_emb=self.src_embed(src) * math.sqrt(self.d_model)
+        src_emb=self.src_embed(src)
         src_emb=self.pos_enc(src_emb)
         return self.encoder(src_emb,src_mask)
 
@@ -593,7 +593,7 @@ class Transformer(nn.Module):
             logits : shape [batch, tgt_len, tgt_vocab_size]
         """
         # §3.4: scale embedding by √d_model before adding positional encoding
-        tgt_emb=self.tgt_embed(tgt) * math.sqrt(self.d_model)
+        tgt_emb=self.tgt_embed(tgt) 
         tgt_emb=self.pos_enc(tgt_emb)
         dec_out=self.decoder(tgt_emb,memory,src_mask,tgt_mask)
         # Project decoder output to vocabulary logits — kept here so decode()
