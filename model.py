@@ -20,7 +20,7 @@ import os
 import gdown
 from typing import Optional, Tuple
 import spacy
-
+from spacy.cli import download
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -449,11 +449,15 @@ class Transformer(nn.Module):
     ) -> None:
         super().__init__()
         try:
-            self.spacy_de = spacy.load("de_core_news_sm")
+            spacy.load("de_core_news_sm")
         except OSError:
-            from spacy.cli import download
             download("de_core_news_sm")
-            self.spacy_de = spacy.load("de_core_news_sm")
+            
+        # Download English
+        try:
+            spacy.load("en_core_web_sm")
+        except OSError:
+            download("en_core_web_sm")
         try:
             from dataset import Multi30kDataset
             self.dataset_helper=Multi30kDataset(split='train')
