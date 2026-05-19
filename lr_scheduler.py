@@ -57,7 +57,8 @@ class NoamScheduler(LRScheduler):
             scale = d_model^(-0.5) * min(step^(-0.5), step * warmup_steps^(-1.5))
         """
         # TODO: Implement and return the Noam scale factor
-        step=self.last_epoch + 1
+        # Clamp to 1 so step=0 never occurs (avoids 0**(-0.5) at scheduler init)
+        step = max(self.last_epoch + 1, 1)
         scale=self.d_model**(-0.5)*min(step**(-0.5), step*self.warmup_steps**(-1.5))
         return scale
 
